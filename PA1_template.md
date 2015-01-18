@@ -179,4 +179,4 @@ xyplot(newData$AvgSteps~newData$interval|newData$dayType, type = "l", xlab = "Ti
 
 ![](PA1_template_files/figure-html/dayType_plot-1.png) 
 
-From the above plots we can see that there is more activity in the morning during the weekdays than on weekends. We can also notice that there is more activity during the day on weekends than on weekdays. We can further notice that the activity continues into late evening during the weekends than during the weekdays.
+From the above plots we can see that there is more activity in the morning during the weekdays than on weekends. We can also notice that there is more activity during the day on weekends than on weekdays. We further notice that the activity continues into late evening during the weekends than during the weekdays.
