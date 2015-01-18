@@ -33,7 +33,7 @@ setattr(stepsPerDay, 'names', c("Date", "TotalSteps"))
 hist(stepsPerDay$TotalSteps, main = "Histogram of Total Steps in a Day", xlab = "Total Steps in a Day")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-3-1.png) 
+![](PA1_template_files/figure-html/total_steps-1.png) 
 
 #### Next, calculating the Mean and Median:
 
@@ -71,7 +71,7 @@ setattr(avgstepsPerInt, 'names', c("interval", "AvgSteps"))
 plot(avgstepsPerInt$interval, avgstepsPerInt$AvgSteps, type = "l", main = "Time series Plot", ylab = " Avg Steps", xlab = "Time Interval")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-6-1.png) 
+![](PA1_template_files/figure-html/time_plot-1.png) 
 
 #### Next, finding the interval that has the highest number of steps on average:
 
@@ -129,7 +129,7 @@ setattr(newstepsPerDay, 'names', c("Date", "TotalSteps"))
 hist(newstepsPerDay$TotalSteps, main = "New Histogram of Total Steps in a Day", xlab = "Total Steps in a Day")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-10-1.png) 
+![](PA1_template_files/figure-html/plot_updateddata-1.png) 
 
 #### And, calculating the new mean and median
 
@@ -177,6 +177,6 @@ newData[, AvgSteps:= mean(steps), by = .(interval, dayType)]
 xyplot(newData$AvgSteps~newData$interval|newData$dayType, type = "l", xlab = "Time Interval", ylab = "Average Steps", layout = c(1,2))
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-14-1.png) 
+![](PA1_template_files/figure-html/dayType_plot-1.png) 
 
 From the above plots we can see that there is more activity in the morning during the weekdays than on weekends. We can also notice that there is more activity during the day on weekends than on weekdays. We can further notice that the activity continues into late evening during the weekends than during the weekdays.

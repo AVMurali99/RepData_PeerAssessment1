@@ -5,13 +5,13 @@ output:
     keep_md: true
 ---
 
-```{r results = 'hide'}
+```{r results = 'hide', load_libraries}
 library(data.table)
 ```
 
 ## Loading and preprocessing the data
 
-```{r results = 'hide'}
+```{r results = 'hide', load_data}
 data <- read.csv("activity.csv")
 data <- data.table(data) # Coverting the Data to data.table format
 data[,date:= as.Date(date, format = "%m/%d/%Y")] # Coverting the date column from Char to Date format
@@ -20,21 +20,21 @@ data[,date:= as.Date(date, format = "%m/%d/%Y")] # Coverting the date column fro
 
 ## What is mean total number of steps taken per day?
 #### First, plotting the Histogram:
-```{r}
+```{r total_steps}
 stepsPerDay <- data[,sum(steps), by = date]
 setattr(stepsPerDay, 'names', c("Date", "TotalSteps"))
 hist(stepsPerDay$TotalSteps, main = "Histogram of Total Steps in a Day", xlab = "Total Steps in a Day")
 ```
 
 #### Next, calculating the Mean and Median:
-```{r}
+```{r mean_totalsteps}
 mean <- mean(stepsPerDay$TotalSteps, na.rm = TRUE)
 mean
 ```
 
 The mean of 'Total Steps Per Day' is `r mean`
 
-```{r}
+```{r median_totalsteps}
 median <- median (stepsPerDay$TotalSteps, na.rm = TRUE)
 median
 ```
@@ -44,7 +44,7 @@ The median of 'Total Steps Per Day' is `r median`
 ## What is the average daily activity pattern?
 
 #### First, creating the Time series plot:
-```{r}
+```{r time_plot}
 library(lattice)
 avgstepsPerInt <- data[, mean(steps, na.rm = TRUE), by = interval]
 setattr(avgstepsPerInt, 'names', c("interval", "AvgSteps"))
@@ -52,7 +52,7 @@ plot(avgstepsPerInt$interval, avgstepsPerInt$AvgSteps, type = "l", main = "Time 
 ```
 
 #### Next, finding the interval that has the highest number of steps on average:
-```{r}
+```{r maxsteps_interval}
 index <- avgstepsPerInt[, .I[which.max(AvgSteps)]]
 intMax <- avgstepsPerInt[index, interval]
 intMax
@@ -63,7 +63,7 @@ So the Interval that has the highest number of steps on average is `r intMax`
 ## Imputing missing values
 
 #### 1. Calculating the number of missing values
-```{r}
+```{r num_missing}
 missing <- data[,is.na(steps)]
 numMissing <- sum(missing)
 numMissing
@@ -74,7 +74,7 @@ So the number of missing values in the steps column is `r numMissing`
 #### 2. Let's use  the  corresponding interval  means to fill the missing data
 
 #### 3. Creating a new dataset by filling the missing values using the above strategy
-```{r}
+```{r imputing_missing}
 newData <- data.frame(data)
 for (i in 1:17568) {
   if (missing[i]) {
@@ -88,7 +88,7 @@ for (i in 1:17568) {
 
 #### 4. Plotting the Histogram for Total Steps after filling in missing values
 
-```{r}
+```{r plot_updateddata}
 newData <- data.table(newData)
 newstepsPerDay <- newData[,sum(steps), by = date]
 setattr(newstepsPerDay, 'names', c("Date", "TotalSteps"))
@@ -96,7 +96,7 @@ hist(newstepsPerDay$TotalSteps, main = "New Histogram of Total Steps in a Day", 
 ```
 
 #### And, calculating the new mean and median
-```{r}
+```{r updated_mean}
 newmean <- mean(newstepsPerDay$TotalSteps, na.rm = TRUE)
 newmean
 newmedian <- median (newstepsPerDay$TotalSteps, na.rm = TRUE)
@@ -112,17 +112,17 @@ The mean remained the same whereas the median increased very very slightly. The 
 
 #### Adding a column weekday to indicate which day of the week that date is
 
-```{r results='hide'}
+```{r results='hide', col_weekday}
 newData[, dayType := factor(ifelse(wday(date) %in% c(1,7), "weekend", "weekday"))]
 ```
 
 #### Calculating the Average steps per interval for weekdays and weekends 
-```{r results ='hide'}
+```{r results ='hide', avgby_daytype}
 newData[, AvgSteps:= mean(steps), by = .(interval, dayType)]
 ```
 
 #### And then plotting those averages against the time intervals
-```{r}
+```{r dayType_plot}
 xyplot(newData$AvgSteps~newData$interval|newData$dayType, type = "l", xlab = "Time Interval", ylab = "Average Steps", layout = c(1,2))
 ```
 
